@@ -13,44 +13,62 @@
             <label class="label-input" for="invoicesetupid">ID Dải Hóa Đơn</label>
             <input type="text"
                    id="txtInvoiceSetupID"
-                   name="invoicesetupid" />
+                   name="invoicesetupid"
+                   onblur="handleError(this.id)"/>
+            <span style="color: red; display: block"></span>
+
         </div>
         <div class="form-invoice-input">
             <label class="label-input" for="typename">Loại Dải Hóa Đơn</label>
             <input type="text"
                    id="txtTypeName"
-                   name="typename" />
+                   name="typename"
+                   onblur="handleError(this.id)"/>
+            <span style="color: red; display: block"></span>
+
         </div>
         <div class="form-invoice-input">
             <label class="label-input" for="symbol">Ký Hiệu</label>
-            <input type="text" id="txtSymbol" name="symbol" />
+            <input type="text" id="txtSymbol" name="symbol" onblur="handleError(this.id)"/>
+            <span style="color: red; display: block"></span>
+
         </div>
         <div class="form-invoice-input">
             <label class="label-input" for="startdate">Ngày Bắt Đầu</label>
-            <input type="date" id="txtStartDate" name="startdate" />
+            <input type="date" id="txtStartDate" name="startdate" onblur="handleError(this.id)"/>
+            <span style="color: red; display: block"></span>
+
         </div>
         <div class="form-invoice-input">
             <label class="label-input" for="createby">Được Tạo Bởi</label>
             <input type="text"
                    id="txtCreateBy"
-                   name="createby" />
+                   name="createby" 
+                   onblur="handleError(this.id)"/>
+            <span style="color: red; display: block"></span>
+
         </div>
         <div class="form-invoice-input">
             <label class="label-input" for="invoicestatus">Trạng Thái</label>
             <input type="text"
                    id="txtInvoiceStatus"
-                   name="invoicestatus" />
+                   name="invoicestatus" 
+                   onblur="handleError(this.id)"/>
+            <span style="color: red; display: block"></span>
+
         </div>
         <div class="form-invoice-input">
             <label class="label-input" for="createdon">Ngày Tạo</label>
-            <input type="date" id="txtCreatedOn" name="createdon" />
+            <input type="date" id="txtCreatedOn" name="createdon" onblur="handleError(this.id)" />
+            <span style="color: red; display: block"></span>
+
         </div>
     </div>
     <div class="form-invoice-btn">
-        <button class="btn-invoice" id="btn-create" name="create" value="Create">Thêm</button>
-        <button style="display:none" class="btn-invoice" id="btn-update" name="update" value="Update" onclick="hideUpdate()">Sửa</button>
-        <button style="display:none" class="btn-invoice" id="btn-delete" name="delete" value="Delete" onclick="hideDelete()">Xóa</button>
-        <button class="btn-invoice" id="btn-search" name="search" value="Search">Tìm Kiếm</button>
+        <button class="btn-invoice" id="btn-create" name="create" value="Create" onclick="Create()">Thêm</button>
+        <button style="display:none" class="btn-invoice" id="btn-update" name="update" value="Update" onclick="Update()">Sửa</button>
+        <button style="display:none" class="btn-invoice" id="btn-delete" name="delete" value="Delete" onclick="Delete()">Xóa</button>
+        <button class="btn-invoice" id="btn-search" name="search" value="Search" onclick="Search()">Tìm Kiếm</button>
         <button class="btn-invoice" id="btn-refresh" name="refresh" value="Refresh">Làm Mới</button>
     </div>
     }
@@ -96,6 +114,17 @@
     <div class="data-paginate"></div>
 </div>
 <script>
+    const isNull = (id) => {
+        if (document.getElementById(id).value.trim() === "") {
+            return true
+        }
+        else
+            return false
+    }
+
+    const handleError = (id) => {
+        document.getElementById(id).parentElement.querySelector("span").innerText = ""
+    }
     const handleUpdate = (i) => {
         const x = document.getElementById("btn-update");
         if (x.style.display === "none") {
@@ -163,17 +192,55 @@
         i === 0 ? document.getElementById('txtInvoiceSetupID').value = document.querySelector(`table tbody tr:first-child`).children[0].innerText : document.getElementById('txtInvoiceSetupID').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[0].innerText
     }
 
-    const hideDelete = () => {
+    const Delete = () => {
         const x = document.getElementById("btn-delete");
-        if (x.style.display === "block") {
-            x.style.display = "none";
+        const y = document.getElementById("txtInvoiceSetupID");
+        if (isNull("txtInvoiceSetupID")) {
+            document.getElementById('btn-delete').setAttribute("type", "button")
+            y.focus()
+            y.parentElement.querySelector("span").innerText = "Cần điền trường này !"
+        } else {
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            }
+            y.parentElement.querySelector("span").innerText = ""
+            x.setAttribute("type", "submit")
         }
     }
 
-    const hideUpdate = () => {
+    const Update = () => {
         const x = document.getElementById("btn-update");
-        if (x.style.display === "block") {
-            x.style.display = "none";
+        if (isNull("txtInvoiceSetupID") || isNull("txtTypeName") || isNull("txtSymbol") || isNull("txtStartDate") || isNull("txtCreateBy") || isNull("txtCreatedOn") || isNull("txtInvoiceStatus")) {
+            x.setAttribute("type", "button")
+            alert("Cần điền đầy đủ các trường")
+        } else {
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            }
+            x.setAttribute("type", "submit")
+        }
+    }
+
+    const Create = () => {
+        const x = document.getElementById("btn-create");
+        if (isNull("txtInvoiceSetupID") || isNull("txtTypeName") || isNull("txtSymbol") || isNull("txtStartDate") || isNull("txtCreateBy") || isNull("txtCreatedOn") || isNull("txtInvoiceStatus")) {
+            x.setAttribute("type", "button")
+            alert("Cần điền đầy đủ các trường")
+        } else {
+            x.setAttribute("type", "submit")
+        }
+    }
+
+    const Search = () => {
+        const x = document.getElementById("btn-search");
+        const y = document.getElementById("txtInvoiceLineID");
+        if (isNull("txtInvoiceLineID")) {
+            x.setAttribute("type", "button")
+            y.focus()
+            y.parentElement.querySelector("span").innerText = "Cần điền trường này !"
+        } else {
+            y.parentElement.querySelector("span").innerText = ""
+            x.setAttribute("type", "submit")
         }
     }
 </script>

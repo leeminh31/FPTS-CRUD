@@ -12,24 +12,32 @@
             <label class="label-input" for="supplierid">ID Nhà Phân Phối</label>
             <input type="text"
                    id="txtSupplierID"
-                   name="supplierid" />
+                   name="supplierid"
+                   onblur="handleError(this.id)"/>
+            <span style="color: red; display: block"></span>
+
         </div>
         <div class="form-invoice-input">
             <label class="label-input" for="suppliername">Tên Nhà Phân Phối</label>
             <input type="text"
                    id="txtSupplierName"
-                   name="suppliername" />
+                   name="suppliername"
+                   onblur="handleError(this.id)"/>
+            <span style="color: red; display: block"></span>
+
         </div>
         <div class="form-invoice-input">
             <label class="label-input" for="supplieraddress">Địa Chỉ</label>
-            <input type="text" id="txtSupplierAddress" name="supplieraddress" />
+            <input type="text" id="txtSupplierAddress" name="supplieraddress" onblur="handleError(this.id)" />
+            <span style="color: red; display: block"></span>
+
         </div>
     </div>
     <div class="form-invoice-btn">
-        <button class="btn-invoice" id="btn-create" name="create" value="Create">Thêm</button>
-        <button style="display:none" class="btn-invoice" id="btn-update" name="update" value="Update" onclick="hideUpdate()">Sửa</button>
-        <button style="display:none" class="btn-invoice" id="btn-delete" name="delete" value="Delete" onclick="hideDelete()">Xóa</button>
-        <button class="btn-invoice" id="btn-search" name="search" value="Search">Tìm Kiếm</button>
+        <button class="btn-invoice" id="btn-create" name="create" value="Create" onclick="Create()">Thêm</button>
+        <button style="display:none" class="btn-invoice" id="btn-update" name="update" value="Update" onclick="Update()">Sửa</button>
+        <button style="display:none" class="btn-invoice" id="btn-delete" name="delete" value="Delete" onclick="Delete()">Xóa</button>
+        <button class="btn-invoice" id="btn-search" name="search" value="Search" onclick="Search()">Tìm Kiếm</button>
         <button class="btn-invoice" id="btn-refresh" name="refresh" value="Refresh">Làm Mới</button>
     </div>
     }
@@ -67,6 +75,17 @@
     <div class="data-paginate"></div>
 </div>
 <script>
+    const isNull = (id) => {
+        if (document.getElementById(id).value.trim() === "") {
+            return true
+        }
+        else
+            return false
+    }
+
+    const handleError = (id) => {
+        document.getElementById(id).parentElement.querySelector("span").innerText = ""
+    }
     const handleUpdate = (i) => {
         const x = document.getElementById("btn-update");
         if (x.style.display === "none") {
@@ -92,17 +111,55 @@
         i === 0 ? document.getElementById('txtSupplierID').value = document.querySelector(`table tbody tr:first-child`).children[0].innerText : document.getElementById('txtSupplierID').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[0].innerText
     }
 
-    const hideDelete = () => {
+    const Delete = () => {
         const x = document.getElementById("btn-delete");
-        if (x.style.display === "block") {
-            x.style.display = "none";
+        const y = document.getElementById("txtSupplierID");
+        if (isNull("txtSupplierID")) {
+            document.getElementById('btn-delete').setAttribute("type", "button")
+            y.focus()
+            y.parentElement.querySelector("span").innerText = "Cần điền trường này !"
+        } else {
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            }
+            y.parentElement.querySelector("span").innerText = ""
+            x.setAttribute("type", "submit")
         }
     }
 
-    const hideUpdate = () => {
+    const Update = () => {
         const x = document.getElementById("btn-update");
-        if (x.style.display === "block") {
-            x.style.display = "none";
+        if (isNull("txtSupplierID") || isNull("txtSupplierName") || isNull("txtSupplierAddress")) {
+            x.setAttribute("type", "button")
+            alert("Cần điền đầy đủ các trường")
+        } else {
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            }
+            x.setAttribute("type", "submit")
+        }
+    }
+
+    const Create = () => {
+        const x = document.getElementById("btn-create");
+        if (isNull("txtSupplierID") || isNull("txtSupplierName") || isNull("txtSupplierAddress")) {
+            x.setAttribute("type", "button")
+            alert("Cần điền đầy đủ các trường")
+        } else {
+            x.setAttribute("type", "submit")
+        }
+    }
+
+    const Search = () => {
+        const x = document.getElementById("btn-search");
+        const y = document.getElementById("txtSupplierID");
+        if (isNull("txtSupplierID")) {
+            x.setAttribute("type", "button")
+            y.focus()
+            y.parentElement.querySelector("span").innerText = "Cần điền trường này !"
+        } else {
+            y.parentElement.querySelector("span").innerText = ""
+            x.setAttribute("type", "submit")
         }
     }
 </script>
