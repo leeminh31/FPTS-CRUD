@@ -9,6 +9,7 @@ using System.Configuration;
 using FPTS_CRUD.Models;
 using System.Diagnostics;
 using System.Globalization;
+using static System.Data.Entity.Infrastructure.Design.Executor;
 
 namespace FPTS_CRUD.Controllers
 {
@@ -66,12 +67,12 @@ namespace FPTS_CRUD.Controllers
             return View(table);
         }
         [HttpPost]
-        public ActionResult InvoiceLine(string create, string search, string refresh, string invoicelineid, string productname, string invoiceid, string quantity, string createdate, string price)
+        public ActionResult InvoiceLine(string create, string search, string refresh, string delete, string update, string invoicelineid, string productname, string invoiceid, string quantity, string createdate, string price)
         {
             DataTable table = this.refresh("tb_invoice_line");
             if (create == "Create")
             {
-                handleCreateInvoiceLine(invoicelineid,invoiceid,productname, quantity, price, createdate);
+                handleCreateInvoiceLine(invoicelineid, productname, invoiceid, quantity, createdate, price);
             }
             if (search == "Search")
             {
@@ -80,7 +81,15 @@ namespace FPTS_CRUD.Controllers
             if (refresh == "Refresh")
             {
                 return View(this.refresh("tb_invoice_line"));
-            }          
+            }
+            if (update == "Update")
+            {
+                handleUpdateInvoiceLine(invoicelineid, productname, invoiceid, quantity, createdate, price);
+            }
+            if (delete == "Delete")
+            {
+                handleDeleteInvoiceLine(invoicelineid);
+            }
             return View(table);
         }
 
@@ -90,7 +99,7 @@ namespace FPTS_CRUD.Controllers
             return View(table);
         }
         [HttpPost]
-        public ActionResult InvoiceSetup(string create, string search, string refresh, string invoicesetupid, string typename, string symbol, string startdate, string createby, string invoicestatus, string createdon)
+        public ActionResult InvoiceSetup(string create, string search, string refresh, string update, string delete, string invoicesetupid, string typename, string symbol, string startdate, string createby, string invoicestatus, string createdon)
         {
             DataTable table = this.refresh("tb_invoice_setup");
             if (create == "Create")
@@ -104,6 +113,14 @@ namespace FPTS_CRUD.Controllers
             if (refresh == "Refresh")
             {
                 return View(this.refresh("tb_invoice_setup"));
+            }
+            if (update == "Update")
+            {
+                handleUpdateInvoiceSetup(invoicesetupid, typename, symbol, startdate, createby, invoicestatus, createdon);
+            }
+            if (delete == "Delete")
+            {
+                handleDeleteInvoiceSetup(invoicesetupid);
             }
             return View(table);
         }
@@ -190,6 +207,49 @@ namespace FPTS_CRUD.Controllers
             }
         }
 
+        private void handleUpdateInvoiceLine(string invoicelineid, string productname, string invoiceid, string quantity, string createdate, string price)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_update_invoice_line";
+                    cmd.Parameters.AddWithValue("@id", invoicelineid);
+                    cmd.Parameters.AddWithValue("@invoiceid", invoiceid);
+                    cmd.Parameters.AddWithValue("@productname", productname);
+                    cmd.Parameters.AddWithValue("@quantity", quantity);
+                    cmd.Parameters.AddWithValue("@price", price);
+                    cmd.Parameters.AddWithValue("@createdate", Convert.ToDateTime(createdate));
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
+
+        private void handleUpdateInvoiceSetup(string invoicesetupid, string typename, string symbol, string startdate, string createby, string invoicestatus, string createdon)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_update_invoicesetup";
+                    cmd.Parameters.AddWithValue("@id", invoicesetupid);
+                    cmd.Parameters.AddWithValue("@typename", typename);
+                    cmd.Parameters.AddWithValue("@symbol", symbol);
+                    cmd.Parameters.AddWithValue("@createby", createby);
+                    cmd.Parameters.AddWithValue("@invoicestatus", invoicestatus);
+                    cmd.Parameters.AddWithValue("@createon", Convert.ToDateTime(createdon));
+                    cmd.Parameters.AddWithValue("@startdate", Convert.ToDateTime(startdate));
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
+
         private void handleDeleteInvoice(string invoiceid)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -199,6 +259,38 @@ namespace FPTS_CRUD.Controllers
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "sp_delete_invoice";
                     cmd.Parameters.AddWithValue("@id", invoiceid);
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
+
+        private void handleDeleteInvoiceLine(string invoicelineid)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_delete_invoiceline";
+                    cmd.Parameters.AddWithValue("@id", invoicelineid);
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
+
+        private void handleDeleteInvoiceSetup(string invoicesetupid)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_delete_invoicesetup";
+                    cmd.Parameters.AddWithValue("@id", invoicesetupid);
                     cnn.Open();
                     cmd.ExecuteNonQuery();
                     cnn.Close();

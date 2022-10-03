@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
 using System.Web.Helpers;
+using static System.Data.Entity.Infrastructure.Design.Executor;
+using FPTS_CRUD.Models;
 
 namespace FPTS_CRUD.Controllers
 {
@@ -20,7 +22,7 @@ namespace FPTS_CRUD.Controllers
             return View(table);
         }
         [HttpPost]
-        public ActionResult User(string create, string search, string refresh, string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string userstatus, string email)
+        public ActionResult User(string create, string search, string refresh,string delete, string update, string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string userstatus, string email)
         {
             DataTable table = this.refresh("tb_user");
             if (create == "Create")
@@ -35,6 +37,14 @@ namespace FPTS_CRUD.Controllers
             {
                 return View(this.refresh("tb_user"));
             }
+            if(update == "Update")
+            {
+                handleUpdateUser(username, password, createby, createon, modifiedby, modifiedon, fullname, userstatus, email);
+            }
+            if(delete == "Delete")
+            {
+                handleDeleteUser(username);
+            }
             return View(table);
         }
         public ActionResult Customer()
@@ -44,12 +54,12 @@ namespace FPTS_CRUD.Controllers
         }
 
         [HttpPost]
-        public ActionResult Customer(string create, string search, string refresh, string customerid, string fullname, string gender, string birthdate, string customeraddress, string email)
+        public ActionResult Customer(string create, string search, string refresh, string update, string delete, string customerid, string fullname, string gender, string birthdate, string customeraddress, string email)
         {
             DataTable table = this.refresh("tb_customer");
             if (create == "Create")
             {
-                handleCreateCustomer (customerid, fullname, gender,birthdate,customeraddress, email);
+                handleCreateCustomer(customerid, fullname, gender, birthdate, customeraddress, email);
             }
             if (search == "Search")
             {
@@ -58,6 +68,14 @@ namespace FPTS_CRUD.Controllers
             if (refresh == "Refresh")
             {
                 return View(this.refresh("tb_customer"));
+            }
+            if (update == "Update")
+            {
+                handleUpdateCustomer(customerid, fullname, gender, birthdate, customeraddress, email);
+            }
+            if (delete == "Delete")
+            {
+                handleDeleteCustomer(customerid);
             }
             return View(table);
         }
@@ -68,7 +86,7 @@ namespace FPTS_CRUD.Controllers
         }
 
         [HttpPost]
-        public ActionResult Supplier(string create, string search, string refresh, string supplierid, string suppliername, string supplieraddress)
+        public ActionResult Supplier(string create, string search, string refresh, string delete, string update, string supplierid, string suppliername, string supplieraddress)
         {
             DataTable table = this.refresh("tb_supplier");
             if (create == "Create")
@@ -83,6 +101,14 @@ namespace FPTS_CRUD.Controllers
             {
                 return View(this.refresh("tb_supplier"));
             }
+            if (update == "Update")
+            {
+                handleUpdateSupplier(supplierid, suppliername, supplieraddress);
+            }
+            if (delete == "Delete")
+            {
+                handleDeleteSupplier(supplierid);
+            }
             return View(table);
         }
         public ActionResult UserGroup()
@@ -92,7 +118,7 @@ namespace FPTS_CRUD.Controllers
         }
 
         [HttpPost]
-        public ActionResult UserGroup(string create, string search, string refresh, string username, string groupcode, string createby, string createdate)
+        public ActionResult UserGroup(string create, string search, string refresh,string update, string delete, string username, string groupcode, string createby, string createdate)
         {
             DataTable table = this.refresh("tb_user_group");
             if (create == "Create")
@@ -106,6 +132,14 @@ namespace FPTS_CRUD.Controllers
             if (refresh == "Refresh")
             {
                 return View(this.refresh("tb_user_group"));
+            }
+            if (update == "Update")
+            {
+                handleUpdateUserGroup(username, groupcode, createby, createdate);
+            }
+            if (delete == "Delete")
+            {
+                handleDeleteUserGroup(username, groupcode);
             }
             return View(table);
         }
@@ -145,6 +179,30 @@ namespace FPTS_CRUD.Controllers
                 }
             }
         }
+
+        private void handleUpdateUser(string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string userstatus, string email)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_update_user";
+                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@password", password);
+                    cmd.Parameters.AddWithValue("@createby", createby);
+                    cmd.Parameters.AddWithValue("@createon", Convert.ToDateTime(createon));
+                    cmd.Parameters.AddWithValue("@modifiedby", modifiedby);
+                    cmd.Parameters.AddWithValue("@userstatus", userstatus);
+                    cmd.Parameters.AddWithValue("@fullname", fullname);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@modifiedon", Convert.ToDateTime(modifiedon));
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
         private DataTable handleSearchUser(string username)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -158,6 +216,22 @@ namespace FPTS_CRUD.Controllers
                 }
             }
         }
+
+        private void handleDeleteUser(string username)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_delete_user";
+                    cmd.Parameters.AddWithValue("@id", username);
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
         private void handleCreateCustomer(string customerid, string fullname, string gender, string birthdate, string customeraddress, string email)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -166,6 +240,27 @@ namespace FPTS_CRUD.Controllers
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "sp_insert_customer";
+                    cmd.Parameters.AddWithValue("@id", customerid);
+                    cmd.Parameters.AddWithValue("@fullname", fullname);
+                    cmd.Parameters.AddWithValue("@gender", gender);
+                    cmd.Parameters.AddWithValue("@birthdate", Convert.ToDateTime(birthdate));
+                    cmd.Parameters.AddWithValue("@customeraddress", customeraddress);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
+
+        private void handleUpdateCustomer(string customerid, string fullname, string gender, string birthdate, string customeraddress, string email)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_update_customer";
                     cmd.Parameters.AddWithValue("@id", customerid);
                     cmd.Parameters.AddWithValue("@fullname", fullname);
                     cmd.Parameters.AddWithValue("@gender", gender);
@@ -191,6 +286,22 @@ namespace FPTS_CRUD.Controllers
                 }
             }
         }
+
+        private void handleDeleteCustomer(string customerid)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_delete_customer";
+                    cmd.Parameters.AddWithValue("@id", customerid);
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
         private void handleCreateSupplier(string supplierid, string suppliername, string supplieraddress)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -199,6 +310,23 @@ namespace FPTS_CRUD.Controllers
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "sp_insert_supplier";
+                    cmd.Parameters.AddWithValue("@id", supplierid);
+                    cmd.Parameters.AddWithValue("@suppliername", suppliername);
+                    cmd.Parameters.AddWithValue("@supplieraddress", supplieraddress);
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
+        private void handleUpdateSupplier(string supplierid, string suppliername, string supplieraddress)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_update_supplier";
                     cmd.Parameters.AddWithValue("@id", supplierid);
                     cmd.Parameters.AddWithValue("@suppliername", suppliername);
                     cmd.Parameters.AddWithValue("@supplieraddress", supplieraddress);
@@ -221,6 +349,22 @@ namespace FPTS_CRUD.Controllers
                 }
             }
         }
+
+        private void handleDeleteSupplier(string supplierid)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_delete_supplier";
+                    cmd.Parameters.AddWithValue("@id", supplierid);
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
         private void handleCreateUserGroup(string username, string groupcode, string createby, string createdate)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -229,6 +373,25 @@ namespace FPTS_CRUD.Controllers
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "sp_insert_usergroup";
+                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@groupcode", groupcode);
+                    cmd.Parameters.AddWithValue("@createby", createby);
+                    cmd.Parameters.AddWithValue("@createdate", Convert.ToDateTime(createdate));
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
+                }
+            }
+        }
+
+        private void handleUpdateUserGroup(string username, string groupcode, string createby, string createdate)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_update_usergroup";
                     cmd.Parameters.AddWithValue("@username", username);
                     cmd.Parameters.AddWithValue("@groupcode", groupcode);
                     cmd.Parameters.AddWithValue("@createby", createby);
@@ -249,6 +412,23 @@ namespace FPTS_CRUD.Controllers
                     DataTable table = new DataTable();
                     dataAdapter.Fill(table);
                     return table;
+                }
+            }
+        }
+
+        private void handleDeleteUserGroup(string username, string groupcode)
+        {
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("", cnn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_delete_usergroup";
+                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@groupcode", groupcode);
+                    cnn.Open();
+                    cmd.ExecuteNonQuery();
+                    cnn.Close();
                 }
             }
         }
