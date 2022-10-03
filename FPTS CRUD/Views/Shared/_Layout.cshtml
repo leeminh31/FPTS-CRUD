@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <link href="~/Content/css/invoice.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container body-content">
+        <div class="invoice-header">
+            <ul>
+                <li>
+                    @Html.ActionLink("Hóa Đơn Điện Tử", // <-- Link text
+                                "Invoice", // <-- Action Method Name
+                                "Invoice", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                    <div class="sub-nav">
+                        <ul>
+                            @Html.ActionLink("Lập Hóa Đơn", // <-- Link text
+                                "Invoice", // <-- Action Method Name
+                                "Invoice", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                            @Html.ActionLink("Chi Tiết Hóa Đơn", // <-- Link text
+                                "InvoiceLine", // <-- Action Method Name
+                                "Invoice", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                            @Html.ActionLink("Dải Hóa Đơn", // <-- Link text
+                                "InvoiceSetup", // <-- Action Method Name
+                                "Invoice", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    @Html.ActionLink("Hệ Thống", // <-- Link text
+                                "User", // <-- Action Method Name
+                                "System", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                    <div class="sub-nav">
+                        <ul>
+                            @Html.ActionLink("Quản Lý Người Dùng", // <-- Link text
+                                "User", // <-- Action Method Name
+                                "System", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                            @Html.ActionLink("Quản Lý Nhóm Người Dùng", // <-- Link text
+                                "UserGroup", // <-- Action Method Name
+                                "System", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                            @Html.ActionLink("Quản Lý Nhà Cung Cấp", // <-- Link text
+                                "Supplier", // <-- Action Method Name
+                                "System", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                            @Html.ActionLink("Quản Lý Khách Hàng", // <-- Link text
+                                "Customer", // <-- Action Method Name
+                                "System", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                            )
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        @RenderBody()
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

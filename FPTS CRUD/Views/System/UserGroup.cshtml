@@ -1,0 +1,137 @@
+﻿@model System.Data.DataTable
+@{
+    ViewBag.Title = "UserGroup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="invoice-body">
+    <h1>Khai báo thông tin hóa đơn</h1>
+    @Html.BeginForm("UserGroup", "System", FormMethod.Post)
+    {
+    <div class="form-invoice-info">
+        <div class="form-invoice-input">
+            <label class="label-input" for="username">Tên Tài Khoản</label>
+            <input type="text"
+                   id="txtUsername"
+                   name="username" />
+        </div>
+        <div class="form-invoice-input">
+            <label class="label-input" for="groupcode">Nhóm Người Dùng</label>
+            <input type="text"
+                   id="txtGroupCode"
+                   name="groupcode" />
+        </div>
+        <div class="form-invoice-input">
+            <label class="label-input" for="createby">Được Tảo Bởi</label>
+            <input type="text" id="txtCreateBy" name="createby" />
+        </div>
+        <div class="form-invoice-input">
+            <label class="label-input" for="createdate">Ngày Tạo</label>
+            <input type="date"
+                   id="txtCreateDate"
+                   name="createdate" />
+        </div>
+    </div>
+    <div class="form-invoice-btn">
+        <button class="btn-invoice" id="btn-create" name="create" value="Create">Thêm</button>
+        <button style="display:none" class="btn-invoice" id="btn-update" name="update" value="Update" onclick="hideUpdate()">Sửa</button>
+        <button style="display:none" class="btn-invoice" id="btn-delete" name="delete" value="Delete" onclick="hideDelete()">Xóa</button>
+        <button class="btn-invoice" id="btn-search" name="search" value="Search">Tìm Kiếm</button>
+        <button class="btn-invoice" id="btn-refresh" name="refresh" value="Refresh">Làm Mới</button>
+    </div>
+    }
+</div>
+<div class="invoice-data-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên Tài Khoản</th>
+                <th>Nhóm Người Dùng</th>
+                <th>Được Tạo Bởi</th>
+                <th>Ngày Tạo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Rows.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Rows[i][0]</td>
+                    <td>@Model.Rows[i][1]</td>
+                    <td>@Model.Rows[i][2]</td>
+                    <td>@Model.Rows[i][3]</td>
+
+                    <td>
+                        <span onclick="handleUpdate(@i)">
+                            <img style="width:18px; height:18px"
+                                 src="~/Content/images/edit.svg" title="Edit user" />
+                        </span>
+                        <span onclick="handleDelete(@i)">
+                            <img style="width:18px; height:18px; margin-left: 4%;"
+                                 src="~/Content/images/bin.svg" title="Delete user" />
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="data-paginate"></div>
+</div>
+<script>
+    const handleUpdate = (i) => {
+        const x = document.getElementById("btn-update");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        }
+        if (i === 0) {
+            let getDate = document.querySelector(`table tbody tr:first-child`).children[3].innerText.slice(0, -11).split("/")
+            if (parseInt(getDate[0]) >= 1 && parseInt(getDate[0]) <= 9) {
+                getDate[0] = "0" + getDate[0]
+            }
+            if (parseInt(getDate[1]) >= 1 && parseInt(getDate[1]) <= 9) {
+                getDate[1] = "0" + getDate[1]
+            }
+            const dateFormat = getDate[2].trim() + "-" + getDate[0] + "-" + getDate[1]
+            document.getElementById('txtUsername').value = document.querySelector(`table tbody tr:first-child`).children[0].innerText
+            document.getElementById('txtGroupCode').value = document.querySelector(`table tbody tr:first-child`).children[1].innerText
+            document.getElementById('txtCreateBy').value = document.querySelector(`table tbody tr:first-child`).children[2].innerText
+            document.getElementById('txtCreateDate').value = dateFormat
+        } else {
+            let getDate = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[3].innerText.slice(0, -11).split("/")
+            if (parseInt(getDate[0]) >= 1 && parseInt(getDate[0]) <= 9) {
+                getDate[0] = "0" + getDate[0]
+            }
+            if (parseInt(getDate[1]) >= 1 && parseInt(getDate[1]) <= 9) {
+                getDate[1] = "0" + getDate[1]
+            }
+            const dateFormat = getDate[2].trim() + "-" + getDate[0] + "-" + getDate[1]
+            document.getElementById('txtUsername').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[0].innerText
+            document.getElementById('txtGroupCode').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[1].innerText
+            document.getElementById('txtCreateBy').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[2].innerText
+            document.getElementById('txtCreateDate').value = dateFormat
+        }
+    }
+
+    const handleDelete = (i) => {
+        const x = document.getElementById("btn-delete");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        }
+        i === 0 ? document.getElementById('txtUsername').value = document.querySelector(`table tbody tr:first-child`).children[0].innerText : document.getElementById('txtUsername').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[0].innerText
+        i === 0 ? document.getElementById('txtGroupCode').value = document.querySelector(`table tbody tr:first-child`).children[1].innerText : document.getElementById('txtGroupCode').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[1].innerText
+    }
+
+    const hideDelete = () => {
+        const x = document.getElementById("btn-delete");
+        if (x.style.display === "block") {
+            x.style.display = "none";
+        }
+    }
+
+    const hideUpdate = () => {
+        const x = document.getElementById("btn-update");
+        if (x.style.display === "block") {
+            x.style.display = "none";
+        }
+    }
+</script>
+

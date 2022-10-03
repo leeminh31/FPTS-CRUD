@@ -1,0 +1,155 @@
+﻿@model System.Data.DataTable
+@{
+    ViewBag.Title = "InvoiceLine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="invoice-body">
+    <h1>Khai báo thông tin chi tiết hóa đơn</h1>
+    @Html.BeginForm("InvoiceLine", "Invoice", FormMethod.Post)
+    {
+    <div class="form-invoice-info">
+        <div class="form-invoice-input">
+            <label class="label-input" for="invoicelineid">ID Chi Tiết Hóa Đơn</label>
+            <input type="text"
+                   id="txtInvoiceLineID"
+                   name="invoicelineid" />
+        </div>
+        <div class="form-invoice-input">
+            <label class="label-input" for="invoiceid">ID Hóa Đơn</label>
+            <input type="text"
+                   id="txtInvoiceID"
+                   name="invoiceid" />
+        </div>
+        <div class="form-invoice-input">
+            <label class="label-input" for="productname">Tên Sản Phẩm</label>
+            <input type="text" id="txtProductName" name="productname" />
+        </div>
+        <div class="form-invoice-input">
+            <label class="label-input" for="quantity">Số Lượng</label>
+            <input type="text"
+                   id="txtQuantity"
+                   name="quantity" />
+        </div>
+        <div class="form-invoice-input">
+            <label class="label-input" for="price">Giá Tiền</label>
+            <input type="text"
+                   id="txtPrice"
+                   name="price" />
+        </div>
+        <div class="form-invoice-input">
+            <label class="label-input" for="createon">Ngày Tạo</label>
+            <input type="date" id="txtCreateDate" name="createdate" />
+        </div>
+    </div>
+    <div class="form-invoice-btn">
+        <button class="btn-invoice" id="btn-create" name="create" value="Create">Thêm</button>
+        <button style="display:none" class="btn-invoice" id="btn-update" name="update" value="Update" onclick="hideUpdate()">Sửa</button>
+        <button style="display:none" class="btn-invoice" id="btn-delete" name="delete" value="Delete" onclick="hideDelete()">Xóa</button>
+        <button class="btn-invoice" id="btn-search" name="search" value="Search">Tìm Kiếm</button>
+        <button class="btn-invoice" id="btn-refresh" name="refresh" value="Refresh">Làm Mới</button>
+    </div>
+    }
+</div>
+<div class="invoice-data-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID Chi Tiết Hóa Đơn</th>
+                <th>ID Hóa Đơn</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Số Lượng</th>
+                <th>Giá Tiền</th>
+                <th>Ngày Tạo</th>
+            </tr>
+        </thead>
+        <tbody>
+           @for (int i = 0; i < Model.Rows.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Rows[i][0]</td>
+                    <td>@Model.Rows[i][1]</td>
+                    <td>@Model.Rows[i][2]</td>
+                    <td>@Model.Rows[i][3]</td>
+                    <td>@Model.Rows[i][4]</td>
+                    <td>@Model.Rows[i][5]</td>
+                    <td>
+                        <span onclick="handleUpdate(@i)">
+                            <img style="width:18px; height:18px"
+                                 src="~/Content/images/edit.svg" title="Edit user" />
+                        </span>
+                        <span onclick="handleDelete(@i)">
+                            <img style="width:18px; height:18px; margin-left: 4%;"
+                                 src="~/Content/images/bin.svg" title="Delete user" />
+                        </span>
+                    </td>
+                </tr>
+             }
+            </tbody>
+    </table>
+    <div class="data-paginate"></div>
+</div>
+<script>
+    const handleUpdate = (i) => {
+        const x = document.getElementById("btn-update");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        }
+        if (i === 0) {
+            let getDate = document.querySelector(`table tbody tr:first-child`).children[5].innerText.slice(0, -11).split("/")
+            if (parseInt(getDate[0]) >= 1 && parseInt(getDate[0]) <= 9) {
+                getDate[0] = "0" + getDate[0]
+            }
+            if (parseInt(getDate[1]) >= 1 && parseInt(getDate[1]) <= 9) {
+                getDate[1] = "0" + getDate[1]
+            }
+            const dateFormat = getDate[2].trim() + "-" + getDate[0] + "-" + getDate[1]
+            document.getElementById('txtInvoiceLineID').value = document.querySelector(`table tbody tr:first-child`).children[0].innerText
+            document.getElementById('txtInvoiceID').value = document.querySelector(`table tbody tr:first-child`).children[1].innerText
+            document.getElementById('txtProductName').value = document.querySelector(`table tbody tr:first-child`).children[2].innerText
+            document.getElementById('txtQuantity').value = document.querySelector(`table tbody tr:first-child`).children[3].innerText
+            document.getElementById('txtPrice').value = document.querySelector(`table tbody tr:first-child`).children[4].innerText
+            document.getElementById('txtCreateDate').value = dateFormat
+        } else {
+            let getDate = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[5].innerText.slice(0, -11).split("/")
+            if (parseInt(getDate[0]) >= 1 && parseInt(getDate[0]) <= 9) {
+                getDate[0] = "0" + getDate[0]
+            }
+            console.log(getDate)
+            if (parseInt(getDate[1]) >= 1 && parseInt(getDate[1]) <= 9) {
+                getDate[1] = "0" + getDate[1]
+            }
+            console.log(getDate)
+            const dateFormat = getDate[2].trim() + "-" + getDate[0] + "-" + getDate[1]
+            document.getElementById('txtInvoiceLineID').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[0].innerText
+            document.getElementById('txtInvoiceID').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[1].innerText
+            document.getElementById('txtProductName').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[2].innerText
+            document.getElementById('txtQuantity').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[3].innerText
+            document.getElementById('txtPrice').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[4].innerText
+            document.getElementById('txtCreateDate').value = dateFormat
+            
+        }
+    }
+
+    const handleDelete = (i) => {
+        const x = document.getElementById("btn-delete");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        }
+        i === 0 ? document.getElementById('txtInvoiceLineID').value = document.querySelector(`table tbody tr:first-child`).children[0].innerText : document.getElementById('txtInvoiceLineID').value = document.querySelector(`table tbody tr:nth-child(${i + 1})`).children[0].innerText
+    }
+
+    const hideDelete = () => {
+        const x = document.getElementById("btn-delete");
+        if (x.style.display === "block") {
+            x.style.display = "none";
+        }
+    }
+
+    const hideUpdate = () => {
+        const x = document.getElementById("btn-update");
+        if (x.style.display === "block") {
+            x.style.display = "none";
+        }
+    }
+</script>

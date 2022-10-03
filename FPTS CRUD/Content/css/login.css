@@ -1,0 +1,204 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.header-bar {
+    width: 100%;
+    height: auto;
+    background-color: #007db8;
+    padding: 4px 0;
+    min-height: 20px;
+}
+
+.container-header {
+    width: 1270px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-header .hotline {
+    color: #fff;
+}
+
+.container-header .language {
+    display: flex;
+    align-items: center;
+}
+
+.container-header .language img {
+    width: 27px;
+}
+
+.header-logo {
+    width: 100%;
+    padding: 25px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.header-logo img {
+    height: 60px;
+    width: 246px;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+}
+
+.menu ul {
+    display: flex;
+}
+
+.menu ul li {
+    padding: 0 10px;
+    border-right: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.menu ul li:hover {
+    color: #0055ba;
+}
+
+.form-login {
+    min-width: 300px;
+    max-width: 329px;
+    background-color: #fff;
+    min-height: 300px;
+    margin: 2rem auto;
+    border-radius: 11px;
+    border: 1px solid #ddd;
+    -webkit-box-shadow: 0 3px 14px rgb(0 0 0 / 15%);
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+}
+
+.form-container .logo-user {
+    margin: auto;
+}
+
+.form-container .user-info {
+    border: 1px solid #333;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.form-container .user-info input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.form-container button {
+    border: 1px solid #007db8;
+    border-radius: 5px;
+    outline: none;
+    padding: 10px;
+    background-color: #007db8;
+    color: white;
+}
+
+.support {
+    padding: 20px;
+    text-align: center;
+}
+
+.create-acc {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.create-acc span {
+    font-style: italic;
+    font-size: 14px;
+}
+
+.create-acc span i {
+    color: #007db8;
+}
+
+.app-installation {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.app-installation .app-store img {
+    width: 120px;
+}
+
+.footer {
+}
+
+.footer .question {
+    width: 100%;
+    height: 40px;
+    background-color: #ccc;
+    margin-top: 40px;
+}
+
+.footer .question ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.footer .question ul li {
+    padding: 0 40px;
+    border-left: 1px solid #333;
+    text-transform: uppercase;
+}
+
+.footer .question ul li:first-child {
+    border: none;
+}
+
+.footer .address {
+    width: 100%;
+    background-color: #4d4d4d;
+    color: #fff;
+    padding: 25px 0 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.footer .address .address-container {
+    width: 1270px;
+    padding-left: 4%;
+    display: flex;
+}
+
+.footer .address .address-container .col-address h4 {
+    color: #e56f21;
+}
+
+.footer .address .address-container .more-info {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.footer .address .address-container .more-info span {
+    padding: 5px 0;
+    display: flex;
+}
+
+.footer .address .address-container .more-info span img {
+    width: 14px;
+    height: 16px;
+    margin-right: 5px;
+}
