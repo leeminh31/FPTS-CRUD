@@ -22,12 +22,12 @@ namespace FPTS_CRUD.Controllers
             return View(table);
         }
         [HttpPost]
-        public ActionResult User(string create, string search, string refresh,string delete, string update, string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string userstatus, string email)
+        public ActionResult User(string create, string search, string refresh,string delete, string update, string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string email, string userstatus)
         {
             DataTable table = this.refresh("tb_user");
             if (create == "Create")
             {
-                handleCreateUser(username, password, createby, createon, modifiedby, modifiedon, fullname, userstatus, email);
+                handleCreateUser(username, password, createby, createon, modifiedby, modifiedon, fullname, email, userstatus);
             }
             if (search == "Search")
             {
@@ -39,7 +39,7 @@ namespace FPTS_CRUD.Controllers
             }
             if(update == "Update")
             {
-                handleUpdateUser(username, password, createby, createon, modifiedby, modifiedon, fullname, userstatus, email);
+                handleUpdateUser(username, password, createby, createon, modifiedby, modifiedon, fullname, email, userstatus);
             }
             if(delete == "Delete")
             {
@@ -156,7 +156,7 @@ namespace FPTS_CRUD.Controllers
             }
             return table;
         }
-        private void handleCreateUser(string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string userstatus, string email)
+        private void handleCreateUser(string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string email, string userstatus)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
@@ -180,7 +180,7 @@ namespace FPTS_CRUD.Controllers
             }
         }
 
-        private void handleUpdateUser(string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string userstatus, string email)
+        private void handleUpdateUser(string username, string password, string createby, string createon, string modifiedby, string modifiedon, string fullname, string email, string userstatus)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
