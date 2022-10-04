@@ -10,6 +10,8 @@ using FPTS_CRUD.Models;
 using System.Diagnostics;
 using System.Globalization;
 using static System.Data.Entity.Infrastructure.Design.Executor;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace FPTS_CRUD.Controllers
 {
@@ -35,7 +37,7 @@ namespace FPTS_CRUD.Controllers
             return View(table);
         }
         [HttpPost]
-        public ActionResult Invoice(string create, string search, string refresh,string update, string delete, string customerid, string supplierid, string invoiceid, string invoicesetupid, string startdate)
+        public ActionResult Invoice(string create, string search, string refresh,string update, string delete, string export, string customerid, string supplierid, string invoiceid, string invoicesetupid, string startdate)
         {
             DataTable table = this.refresh("tb_invoice");
             if (create == "Create")
@@ -58,6 +60,28 @@ namespace FPTS_CRUD.Controllers
             {
                 handleDeleteInvoice(invoiceid);
             }
+            if(export == "Export")
+            {
+                using (XLWorkbook workbook = new XLWorkbook())
+                {
+                    table.TableName = "Invoice";
+                    workbook.Worksheets.Add(table);
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename=Invoice.xlsx");
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        workbook.SaveAs(MyMemoryStream);
+                        MyMemoryStream.WriteTo(Response.OutputStream);
+                    }
+
+                }
+
+                Response.Flush();
+                Response.End();
+            }          
             return View(table);
         }
 
