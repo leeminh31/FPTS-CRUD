@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\SendEmailController.cs" />
     <Compile Include="Controllers\SystemController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -130,6 +131,7 @@
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceLine.cs" />
     <Compile Include="Models\InvoiceSetup.cs" />
+    <Compile Include="Models\SendEmail.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserGroup.cs" />
@@ -148,6 +150,8 @@
     <Content Include="Views\System\UserGroup.cshtml" />
     <Content Include="Views\System\Customer.cshtml" />
     <Content Include="Views\System\Supplier.cshtml" />
+    <Content Include="Views\SendEmail\Index.cshtml" />
+    <Content Include="Views\SendEmail\Location.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

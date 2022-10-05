@@ -1,0 +1,115 @@
+﻿@model FPTS_CRUD.Models.EmailList
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="invoice-body">
+    <h1>Khai báo thông tin hóa đơn</h1>
+    @Html.BeginForm("Index", "SendEmail", FormMethod.Post, new { id = "form_validate" })
+    {
+<div class="form-invoice-info">
+    <div class="form-invoice-input">
+        <label class="label-input" for="invoicecode">Code</label>
+        <input type="text"
+               id="txtInvoiceCode"
+               name="invoicecode"
+               onblur="handleError(this.id)" />
+        <span style="color: red; display: block"></span>
+    </div>
+    <div class="form-invoice-input">
+        <label class="label-input" for="fullname">Tên Khách Hàng</label>
+        <input type="text"
+               id="txtFullname"
+               name="fullname"
+               onblur="handleError(this.id)" />
+        <span style="color: red; display: block"></span>
+
+    </div>
+    <div class="form-invoice-input">
+        <label class="label-input" for="customeraddress">Địa Chỉ Khách Hàng</label>
+        <input type="text" id="txtCustomerAddress" name="customeraddress" onblur="handleError(this.id)" />
+        <span style="color: red; display: block"></span>
+
+    </div>
+    <div class="form-invoice-input">
+        <label class="label-input" for="email">Email</label>
+        <input type="text"
+               id="txtEmail"
+               name="email"
+               onblur="handleError(this.id)" />
+        <span style="color: red; display: block"></span>
+
+    </div>
+    <div class="form-invoice-input">
+        <label class="label-input" for="productname">Tên Sản Phẩm</label>
+        <input type="text"
+               id="txtProductName"
+               name="productname"
+               onblur="handleError(this.id)" />
+        <span style="color: red; display: block"></span>
+
+    </div>
+    <div class="form-invoice-input">
+        <label class="label-input" for="quantity">Số Lượng</label>
+        <input type="text"
+               id="txtQuantity"
+               name="quantity"
+               onblur="handleError(this.id)" />
+        <span style="color: red; display: block"></span>
+
+    </div>
+    <div class="form-invoice-input">
+        <label class="label-input" for="price">Giá Tiền</label>
+        <input type="text"
+               id="txtPrice"
+               name="price"
+               onblur="handleError(this.id)" />
+        <span style="color: red; display: block"></span>
+
+    </div>
+</div>
+    <div class="form-invoice-btn">
+        <button class="btn-invoice" id="btn-search" name="search" value="Search">Tìm Kiếm</button>
+    </div>
+    }
+</div>
+<div class="invoice-data-container">
+    @using (Html.BeginForm("Index", "SendEmail", FormMethod.Post))
+    {
+        <table class="table">
+            <thead>
+                <th>Code</th>
+                <th>Tên Khách Hàng</th>
+                <th>Email</th>
+                <th>Địa Chỉ Khách Hàng</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Số Lượng</th>
+                <th>Giá Tiền</th>
+                <th>Check List</th>
+            </thead>
+            <tbody>
+
+            @for (int i = 0; i < Model.ListEmails.Count; i++)
+            {
+                <tr style="text-align:center">
+                    <td>@Html.DisplayTextFor(m => Model.ListEmails[i].InvoiceCode)</td>
+                    <td>@Html.DisplayTextFor(m => Model.ListEmails[i].Fullname)</td>
+                    <td>@Html.DisplayTextFor(m => Model.ListEmails[i].Email)</td>
+                    <td>@Html.DisplayTextFor(m => Model.ListEmails[i].CustomerAddress)</td>
+                    <td>@Html.DisplayTextFor(m => Model.ListEmails[i].ProductName)</td>
+                    <td>@Html.DisplayTextFor(m => Model.ListEmails[i].Quantity)</td>
+                    <td>@Html.DisplayTextFor(m => Model.ListEmails[i].Price)</td>
+                    <td>@Html.Hidden("emailvalue"+i, Model.ListEmails[i].Email)</td>
+                    <td>@Html.CheckBoxFor(m => Model.ListEmails[i].IsChecked)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Send" class="btn btn-default" />
+        </div>
+        @ViewBag.EmailList
+    }
+</div>
+

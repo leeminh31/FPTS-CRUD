@@ -168,7 +168,7 @@ namespace FPTS_CRUD.Controllers
                 }
             }
         }
-        private void handleCreateInvoiceLine(string invoicelineid, string invoiceid, string productname, string quantity, string price, string createdate)
+        private void handleCreateInvoiceLine(string invoicelineid, string productname, string invoiceid, string quantity, string createdate, string price)
         {
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {

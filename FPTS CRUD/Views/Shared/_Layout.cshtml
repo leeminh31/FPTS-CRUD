@@ -78,6 +78,14 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    @Html.ActionLink("Gửi Email", // <-- Link text
+                                "Index", // <-- Action Method Name
+                                "SendEmail", // <-- Controller Name
+                                null, // <-- Route value
+                                null // <-- htmlArguments
+                    )
+                </li>
             </ul>
         </div>
         @RenderBody()
